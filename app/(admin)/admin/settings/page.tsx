@@ -1,235 +1,81 @@
 "use client";
 
-import { useState } from "react";
+import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
-import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import { Badge } from "@/components/ui/badge";
-import { Save, Plus, X, Settings2 } from "lucide-react";
-import { useToast } from "@/components/ui/use-toast";
-import { jobConfiguration } from "@/lib/jobConfig";
+import { Settings as SettingsIcon, Globe, FileText, Mail } from "lucide-react";
+import Link from "next/link";
 
-export default function AdminSettings() {
-  const { toast } = useToast();
-  const [categories, setCategories] = useState(jobConfiguration.categories);
-  const [jobTypes, setJobTypes] = useState(jobConfiguration.jobTypes);
-  const [experienceLevels, setExperienceLevels] = useState(jobConfiguration.experienceLevels);
-  const [locations, setLocations] = useState(jobConfiguration.locations);
-  const [newItem, setNewItem] = useState("");
-
-  const handleAdd = (list: string[], setList: (items: string[]) => void) => {
-    if (newItem.trim() && !list.includes(newItem.trim())) {
-      setList([...list, newItem.trim()]);
-      setNewItem("");
-      toast({
-        title: "Added successfully",
-        description: "The new item has been added to the list.",
-      });
-    }
-  };
-
-  const handleRemove = (item: string, list: string[], setList: (items: string[]) => void) => {
-    setList(list.filter(i => i !== item));
-    toast({
-      title: "Removed",
-      description: "The item has been removed from the list.",
-    });
-  };
-
-  const handleSave = () => {
-    toast({
-      title: "Settings Saved!",
-      description: "Your configuration has been updated successfully.",
-    });
-  };
+export default function Settings() {
+  const settingsCategories = [
+    {
+      title: "Site Configuration",
+      description: "Manage site name, logo, and global settings",
+      icon: Globe,
+      href: "/admin/settings/site",
+      color: "text-blue-600",
+    },
+    {
+      title: "Content Management",
+      description: "Edit static pages and manage blog content",
+      icon: FileText,
+      href: "/admin/settings/content",
+      color: "text-purple-600",
+    },
+    {
+      title: "Email Configuration",
+      description: "Configure email templates and settings",
+      icon: Mail,
+      href: "/admin/settings/email",
+      color: "text-green-600",
+    },
+    {
+      title: "Job Configuration",
+      description: "Manage categories, locations, and job settings",
+      icon: SettingsIcon,
+      href: "/admin/settings/config",
+      color: "text-orange-600",
+    },
+  ];
 
   return (
-    <div className="space-y-6">
-      <div className="flex items-center justify-between">
-        <div>
-          <h1 className="text-2xl font-bold flex items-center gap-2">
-            <Settings2 className="h-6 w-6" />
-            Job Configuration
-          </h1>
-          <p className="text-sm text-muted-foreground mt-1">
-            Manage categories, types, and other job listing options
-          </p>
-        </div>
-        <Button onClick={handleSave} className="bg-primary hover:bg-primary/90">
-          <Save className="h-4 w-4 mr-2" />
-          Save All Changes
-        </Button>
+    <div className="space-y-8">
+      <div className="animate-fade-in">
+        <h1 className="text-3xl font-bold mb-2 bg-linear-to-r from-primary to-accent bg-clip-text text-transparent">
+          Settings
+        </h1>
+        <p className="text-muted-foreground">Configure your job portal settings</p>
       </div>
 
-      <Tabs defaultValue="categories" className="space-y-6">
-        <TabsList className="grid w-full grid-cols-4 lg:w-[600px]">
-          <TabsTrigger value="categories">Categories</TabsTrigger>
-          <TabsTrigger value="types">Job Types</TabsTrigger>
-          <TabsTrigger value="experience">Experience</TabsTrigger>
-          <TabsTrigger value="locations">Locations</TabsTrigger>
-        </TabsList>
-
-        {/* Categories Tab */}
-        <TabsContent value="categories" className="space-y-4">
-          <Card>
+      <div className="grid gap-6 md:grid-cols-2">
+        {settingsCategories.map((category, index) => (
+          <Card
+            key={index}
+            className="shadow-card hover:shadow-card-hover transition-all duration-300 animate-fade-in"
+            style={{ animationDelay: `${index * 50}ms` }}
+          >
             <CardHeader>
-              <CardTitle>Job Categories</CardTitle>
-              <CardDescription>
-                Manage the categories used to classify job listings
-              </CardDescription>
+              <div className="flex items-start justify-between">
+                <div className="flex-1">
+                  <div className="flex items-center gap-3 mb-2">
+                    <div className={`p-2 rounded-lg bg-secondary ${category.color}`}>
+                      <category.icon className="h-6 w-6" />
+                    </div>
+                    <CardTitle>{category.title}</CardTitle>
+                  </div>
+                  <CardDescription>{category.description}</CardDescription>
+                </div>
+              </div>
             </CardHeader>
-            <CardContent className="space-y-4">
-              <div className="flex gap-2">
-                <Input
-                  value={newItem}
-                  onChange={(e) => setNewItem(e.target.value)}
-                  placeholder="Add new category..."
-                  onKeyPress={(e) => e.key === 'Enter' && handleAdd(categories, setCategories)}
-                />
-                <Button onClick={() => handleAdd(categories, setCategories)}>
-                  <Plus className="h-4 w-4 mr-2" />
-                  Add
-                </Button>
-              </div>
-              
-              <div className="flex flex-wrap gap-2">
-                {categories.map((category) => (
-                  <Badge key={category} variant="secondary" className="text-sm py-2 px-3">
-                    {category}
-                    <button
-                      onClick={() => handleRemove(category, categories, setCategories)}
-                      className="ml-2 hover:text-destructive"
-                    >
-                      <X className="h-3 w-3" />
-                    </button>
-                  </Badge>
-                ))}
-              </div>
+            <CardContent>
+              <Button asChild variant="outline" className="w-full">
+                <Link href={category.href}>
+                  Configure
+                </Link>
+              </Button>
             </CardContent>
           </Card>
-        </TabsContent>
-
-        {/* Job Types Tab */}
-        <TabsContent value="types" className="space-y-4">
-          <Card>
-            <CardHeader>
-              <CardTitle>Employment Types</CardTitle>
-              <CardDescription>
-                Manage the employment types available for job listings
-              </CardDescription>
-            </CardHeader>
-            <CardContent className="space-y-4">
-              <div className="flex gap-2">
-                <Input
-                  value={newItem}
-                  onChange={(e) => setNewItem(e.target.value)}
-                  placeholder="Add new job type..."
-                  onKeyPress={(e) => e.key === 'Enter' && handleAdd(jobTypes, setJobTypes)}
-                />
-                <Button onClick={() => handleAdd(jobTypes, setJobTypes)}>
-                  <Plus className="h-4 w-4 mr-2" />
-                  Add
-                </Button>
-              </div>
-              
-              <div className="flex flex-wrap gap-2">
-                {jobTypes.map((type) => (
-                  <Badge key={type} variant="secondary" className="text-sm py-2 px-3">
-                    {type}
-                    <button
-                      onClick={() => handleRemove(type, jobTypes, setJobTypes)}
-                      className="ml-2 hover:text-destructive"
-                    >
-                      <X className="h-3 w-3" />
-                    </button>
-                  </Badge>
-                ))}
-              </div>
-            </CardContent>
-          </Card>
-        </TabsContent>
-
-        {/* Experience Levels Tab */}
-        <TabsContent value="experience" className="space-y-4">
-          <Card>
-            <CardHeader>
-              <CardTitle>Experience Levels</CardTitle>
-              <CardDescription>
-                Manage the experience levels used in job requirements
-              </CardDescription>
-            </CardHeader>
-            <CardContent className="space-y-4">
-              <div className="flex gap-2">
-                <Input
-                  value={newItem}
-                  onChange={(e) => setNewItem(e.target.value)}
-                  placeholder="Add new experience level..."
-                  onKeyPress={(e) => e.key === 'Enter' && handleAdd(experienceLevels, setExperienceLevels)}
-                />
-                <Button onClick={() => handleAdd(experienceLevels, setExperienceLevels)}>
-                  <Plus className="h-4 w-4 mr-2" />
-                  Add
-                </Button>
-              </div>
-              
-              <div className="flex flex-wrap gap-2">
-                {experienceLevels.map((level) => (
-                  <Badge key={level} variant="secondary" className="text-sm py-2 px-3">
-                    {level}
-                    <button
-                      onClick={() => handleRemove(level, experienceLevels, setExperienceLevels)}
-                      className="ml-2 hover:text-destructive"
-                    >
-                      <X className="h-3 w-3" />
-                    </button>
-                  </Badge>
-                ))}
-              </div>
-            </CardContent>
-          </Card>
-        </TabsContent>
-
-        {/* Locations Tab */}
-        <TabsContent value="locations" className="space-y-4">
-          <Card>
-            <CardHeader>
-              <CardTitle>Job Locations</CardTitle>
-              <CardDescription>
-                Manage the locations available for job postings
-              </CardDescription>
-            </CardHeader>
-            <CardContent className="space-y-4">
-              <div className="flex gap-2">
-                <Input
-                  value={newItem}
-                  onChange={(e) => setNewItem(e.target.value)}
-                  placeholder="Add new location..."
-                  onKeyPress={(e) => e.key === 'Enter' && handleAdd(locations, setLocations)}
-                />
-                <Button onClick={() => handleAdd(locations, setLocations)}>
-                  <Plus className="h-4 w-4 mr-2" />
-                  Add
-                </Button>
-              </div>
-              
-              <div className="flex flex-wrap gap-2">
-                {locations.map((location) => (
-                  <Badge key={location} variant="secondary" className="text-sm py-2 px-3">
-                    {location}
-                    <button
-                      onClick={() => handleRemove(location, locations, setLocations)}
-                      className="ml-2 hover:text-destructive"
-                    >
-                      <X className="h-3 w-3" />
-                    </button>
-                  </Badge>
-                ))}
-              </div>
-            </CardContent>
-          </Card>
-        </TabsContent>
-      </Tabs>
+        ))}
+      </div>
     </div>
   );
 }
