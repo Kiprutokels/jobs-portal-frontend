@@ -80,6 +80,66 @@ Production build:
 Copynpm run build
 npm start
 Project Structure
+
+jobs-portal-frontend/
+├── app/
+│   ├── (auth)/
+│   │   ├── login/page.tsx
+│   │   └── register/page.tsx
+│   ├── (admin)/
+│   │   └── admin/
+│   │       ├── layout.tsx
+│   │       ├── dashboard/page.tsx
+│   │       ├── jobs/
+│   │       │   ├── page.tsx
+│   │       │   ├── new/page.tsx
+│   │       │   └── [id]/edit/page.tsx
+│   │       ├── applications/page.tsx
+│   │       ├── candidates/
+│   │       │   ├── page.tsx
+│   │       │   └── [id]/page.tsx
+│   │       ├── employers/
+│   │       │   ├── page.tsx
+│   │       │   └── [id]/page.tsx
+│   │       ├── users/page.tsx
+│   │       ├── settings/
+│   │       │   ├── page.tsx
+│   │       │   ├── site/page.tsx
+│   │       │   ├── content/page.tsx
+│   │       │   └── email/page.tsx
+│   │       ├── analytics/page.tsx
+│   │       ├── moderation/page.tsx
+│   │       ├── categories/page.tsx
+│   │       ├── monetization/page.tsx
+│   │       └── communications/page.tsx
+│   ├── jobs/
+│   │   ├── page.tsx
+│   │   └── [id]/page.tsx
+│   ├── about/page.tsx
+│   ├── contact/page.tsx
+│   ├── profile/page.tsx
+│   ├── layout.tsx
+│   ├── page.tsx
+│   └── globals.css
+├── components/
+│   ├── ui/
+│   ├── Navbar.tsx
+│   ├── Footer.tsx
+│   ├── JobCard.tsx
+│   ├── AdminNav.tsx
+│   ├── ThemeProvider.tsx
+│   ├── ThemeToggle.tsx
+│   └── StatCard.tsx
+├── contexts/
+│   ├── AuthContext.tsx
+│   └── ThemeContext.tsx
+├── lib/
+│   ├── utils.ts
+│   └── jobConfig.ts
+├── hooks/
+│   └── useTheme.ts
+└── types/
+    └── index.ts
 jobs-portal-frontend/
 ├── app/
 │   ├── (auth)/              # Authentication pages
